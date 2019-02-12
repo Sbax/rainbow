@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import "./App.css";
 
+import { ReactComponent as Copy } from "./copy-regular.svg";
+import { ReactComponent as Github } from "./github-brands.svg";
+
 const colors = [
     "pink",
     "purple",
@@ -51,18 +54,43 @@ class App extends Component {
         });
     }
 
+    copyAction() {
+        const range = document.createRange();
+        const selection = window.getSelection();
+        range.selectNodeContents(this.textArea);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        document.execCommand("copy");
+        window.getSelection().removeAllRanges();
+    }
+
     render() {
         return (
-            <main>
-                <input
-                    type="text"
-                    onChange={e => this.eventToRainbow(e)}
-                    value={this.state.boring}
-                    placeholder="Write here"
-                />
+            <>
+                <section className="input">
+                    <input
+                        type="text"
+                        onChange={e => this.eventToRainbow(e)}
+                        value={this.state.boring}
+                        placeholder="Write here"
+                    />
 
-                <div className="result">{this.state.rainbowed}</div>
-            </main>
+                    <a
+                        className="github"
+                        href="https://github.com/Sbax/rainbow"
+                    >
+                        <Github />
+                        Check out source on Github!
+                    </a>
+
+                    <Copy className="copy" onClick={() => this.copyAction()} />
+                </section>
+                <section className="result">
+                    <div ref={textarea => (this.textArea = textarea)}>
+                        {this.state.rainbowed}
+                    </div>
+                </section>
+            </>
         );
     }
 }
